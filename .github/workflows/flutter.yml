@@ -121,6 +121,19 @@ jobs:
           fi
           cat "$MANIFEST"
 
+      # ============================================================
+      # خطوة حقن الـ Deep Link لتسجيل الدخول بـ Google
+      # ============================================================
+      - name: Register OAuth redirect deep link
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if [ -f "$MANIFEST" ]; then
+            echo "Injecting Deep Link into AndroidManifest.xml..."
+            sed -i '/<activity\s\+android:name="\.MainActivity"/,/<\/activity>/s|<intent-filter>|<intent-filter>\n    <action android:name="android.intent.action.VIEW" />\n    <category android:name="android.intent.category.DEFAULT" />\n    <category android:name="android.intent.category.BROWSABLE" />\n    <data android:scheme="io.supabase.servicebooking" android:host="login-callback" />|' "$MANIFEST"
+          else
+            echo "Manifest file not found, skipping deep link injection."
+          fi
+
       - name: Get Flutter dependencies
         run: flutter pub get
 
@@ -258,6 +271,19 @@ jobs:
             sed -i '/<manifest /a\    <uses-permission android:name="android.permission.INTERNET" />' "$MANIFEST"
           fi
           cat "$MANIFEST"
+
+      # ============================================================
+      # خطوة حقن الـ Deep Link لتسجيل الدخول بـ Google (نسخة الـ AAB)
+      # ============================================================
+      - name: Register OAuth redirect deep link
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if [ -f "$MANIFEST" ]; then
+            echo "Injecting Deep Link into AndroidManifest.xml..."
+            sed -i '/<activity\s\+android:name="\.MainActivity"/,/<\/activity>/s|<intent-filter>|<intent-filter>\n    <action android:name="android.intent.action.VIEW" />\n    <category android:name="android.intent.category.DEFAULT" />\n    <category android:name="android.intent.category.BROWSABLE" />\n    <data android:scheme="io.supabase.servicebooking" android:host="login-callback" />|' "$MANIFEST"
+          else
+            echo "Manifest file not found, skipping deep link injection."
+          fi
 
       - name: Get Flutter dependencies
         run: flutter pub get
