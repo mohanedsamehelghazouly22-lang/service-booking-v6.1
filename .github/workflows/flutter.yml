@@ -43,6 +43,9 @@ jobs:
           channel: stable
           cache: true
 
+      - name: Ensure assets directory exists
+        run: mkdir -p assets/images
+
       - name: Ensure Android platform
         run: |
           if [ ! -f android/app/build.gradle ] && [ ! -f android/app/build.gradle.kts ]; then
@@ -50,6 +53,9 @@ jobs:
               --platforms=android \
               --org com.servicebooking \
               --project-name service_booking
+              
+            # Delete auto-generated default test to prevent 'MyApp' analyzer error
+            rm -f test/widget_test.dart
           fi
 
       - name: Show Flutter version
@@ -103,6 +109,8 @@ jobs:
               --platforms=android \
               --org com.servicebooking \
               --project-name service_booking
+              
+            rm -f test/widget_test.dart
           fi
 
       - name: Ensure INTERNET permission
@@ -239,6 +247,8 @@ jobs:
               --platforms=android \
               --org com.servicebooking \
               --project-name service_booking
+              
+            rm -f test/widget_test.dart
           fi
 
       - name: Ensure INTERNET permission
